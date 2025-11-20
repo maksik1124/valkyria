@@ -1,0 +1,42 @@
+{% extends \"base.html\" %}
+{% block content %}
+  <h2>Лошади</h2>
+  {% if current_user.role in ['admin', 'owner'] %}
+    <p><a href=\"{{ url_for('horse_create') }}\">Добавить лошадь</a></p>
+  {% endif %}
+  <table>
+    <thead>
+      <tr>
+        <th>Кличка</th>
+        <th>Пол</th>
+        <th>Возраст</th>
+        <th>Владелец</th>
+        {% if current_user.role in ['admin', 'owner'] %}
+          <th>Действия</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for horse in horses %}
+        <tr>
+          <td>{{ horse.name }}</td>
+          <td>{{ horse.sex or \"—\" }}</td>
+          <td>{{ horse.age or \"—\" }}</td>
+          <td>{{ horse.owner.full_name }}</td>
+          {% if current_user.role in ['admin', 'owner'] %}
+            <td>
+              {% if current_user.role == 'admin' or horse.owner_id == current_user.id %}
+                <a href=\"{{ url_for('horse_edit', horse_id=horse.id) }}\">Редактировать</a>
+                <form method=\"post\" action=\"{{ url_for('horse_delete', horse_id=horse.id) }}\" style=\"display:inline\" onsubmit=\"return confirm('Удалить лошадь?');\">
+                  <button type=\"submit\">Удалить</button>
+                </form>
+              {% endif %}
+            </td>
+          {% endif %}
+        </tr>
+      {% else %}
+        <tr><td colspan=\"5\">Лошадей пока нет.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

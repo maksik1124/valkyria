@@ -1,0 +1,44 @@
+{% extends \"base.html\" %}
+{% block content %}
+  <h2>Состязания</h2>
+  <p>Общая информация о прошедших и предстоящих состязаниях клуба.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Дата</th>
+        <th>Время</th>
+        <th>Название</th>
+        <th>Место проведения</th>
+        <th>Участники и результаты</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for competition in competitions %}
+        <tr>
+          <td>{{ competition.date.strftime(\"%d.%m.%Y\") }}</td>
+          <td>{% if competition.time %}{{ competition.time.strftime(\"%H:%M\") }}{% endif %}</td>
+          <td>{{ competition.name }}</td>
+          <td>{{ competition.place }}</td>
+          <td>
+            {% if competition.results %}
+              <ul>
+                {% for result in competition.results|sort(attribute='place') %}
+                  <li>
+                    Место {{ result.place or \"—\" }},
+                    жокей: {{ result.jockey.full_name }},
+                    лошадь: {{ result.horse.name }},
+                    время: {{ result.race_time or \"—\" }}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              Нет данных о результатах
+            {% endif %}
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan=\"5\">Состязаний пока нет.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends \"base.html\" %}
+{% block content %}
+  <h2>{% if horse %}Редактирование лошади{% else %}Новая лошадь{% endif %}</h2>
+  <form method=\"post\">
+    <label>Кличка:
+      <input type=\"text\" name=\"name\" required value=\"{{ horse.name if horse else '' }}\">
+    </label>
+    <label>Пол:
+      <input type=\"text\" name=\"sex\" value=\"{{ horse.sex if horse else '' }}\" placeholder=\"кобыла / жеребец\">
+    </label>
+    <label>Возраст:
+      <input type=\"number\" name=\"age\" min=\"0\" value=\"{{ horse.age if horse and horse.age is not none else '' }}\">
+    </label>
+    {% if current_user.role == 'admin' %}
+      <label>Владелец:
+        <select name=\"owner_id\">
+          {% for owner in owners %}
+            <option value=\"{{ owner.id }}\" {% if horse and horse.owner_id == owner.id %}selected{% endif %}>
+              {{ owner.full_name }}
+            </option>
+          {% endfor %}
+        </select>
+      </label>
+    {% endif %}
+    <button type=\"submit\">Сохранить</button>
+  </form>
+{% endblock %}

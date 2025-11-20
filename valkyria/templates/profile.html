@@ -1,0 +1,24 @@
+{% extends \"base.html\" %}
+{% block content %}
+  <h2>Профиль пользователя</h2>
+  <form method=\"post\">
+    <label>ФИО:
+      <input type=\"text\" name=\"full_name\" required value=\"{{ user.full_name }}\">
+    </label>
+    <label>Возраст:
+      <input type=\"number\" name=\"age\" min=\"0\" value=\"{{ user.age if user.age is not none else '' }}\">
+    </label>
+    <label>Адрес:
+      <input type=\"text\" name=\"address\" value=\"{{ user.address or '' }}\">
+    </label>
+    <label>Контактная информация:
+      <input type=\"text\" name=\"contact_info\" value=\"{{ user.contact_info or '' }}\">
+    </label>
+    {% if user.role == 'jockey' %}
+      <label>Рейтинг:
+        <input type=\"number\" step=\"0.1\" name=\"rating\" value=\"{{ user.rating if user.rating is not none else '' }}\">
+      </label>
+    {% endif %}
+    <button type=\"submit\">Сохранить</button>
+  </form>
+{% endblock %}

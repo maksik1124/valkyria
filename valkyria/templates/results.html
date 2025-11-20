@@ -1,0 +1,46 @@
+{% extends \"base.html\" %}
+{% block content %}
+  <h2>Результаты состязаний</h2>
+  {% if current_user.is_authenticated and current_user.role == 'admin' %}
+    <p><a href=\"{{ url_for('result_create') }}\">Добавить результат</a></p>
+  {% endif %}
+  <table>
+    <thead>
+      <tr>
+        <th>Дата</th>
+        <th>Состязание</th>
+        <th>Место</th>
+        <th>Лошадь</th>
+        <th>Владелец</th>
+        <th>Жокей</th>
+        <th>Показанное время</th>
+        {% if current_user.is_authenticated and current_user.role == 'admin' %}
+          <th>Действия</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for result in results %}
+        <tr>
+          <td>{{ result.competition.date.strftime(\"%d.%m.%Y\") }}</td>
+          <td>{{ result.competition.name }}</td>
+          <td>{{ result.place or \"—\" }}</td>
+          <td>{{ result.horse.name }}</td>
+          <td>{{ result.horse.owner.full_name }}</td>
+          <td>{{ result.jockey.full_name }}</td>
+          <td>{{ result.race_time or \"—\" }}</td>
+          {% if current_user.is_authenticated and current_user.role == 'admin' %}
+            <td>
+              <a href=\"{{ url_for('result_edit', result_id=result.id) }}\">Редактировать</a>
+              <form method=\"post\" action=\"{{ url_for('result_delete', result_id=result.id) }}\" style=\"display:inline\" onsubmit=\"return confirm('Удалить результат?');\">
+                <button type=\"submit\">Удалить</button>
+              </form>
+            </td>
+          {% endif %}
+        </tr>
+      {% else %}
+        <tr><td colspan=\"8\">Результатов пока нет.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends \"base.html\" %}
+{% block content %}
+  <h2>Личный кабинет</h2>
+
+  {% if current_user.role == 'admin' %}
+    <p>Вы вошли как администратор клуба.</p>
+    <ul>
+      <li>Количество состязаний: {{ competitions_count }}</li>
+      <li>Количество лошадей: {{ horses_count }}</li>
+      <li>Количество результатов: {{ results_count }}</li>
+    </ul>
+    <p>
+      <a href=\"{{ url_for('competitions_list') }}\">Управление состязаниями</a> |
+      <a href=\"{{ url_for('horses_list') }}\">Управление лошадьми</a> |
+      <a href=\"{{ url_for('results_list') }}\">Управление результатами</a>
+    </p>
+
+  {% elif current_user.role == 'jockey' %}
+    <p>Вы вошли как жокей.</p>
+    <h3>Мои результаты</h3>
+    {% if results %}
+      <table>
+        <thead>
+          <tr>
+            <th>Дата</th>
+            <th>Состязание</th>
+            <th>Место</th>
+            <th>Лошадь</th>
+            <th>Показанное время</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for result in results %}
+            <tr>
+              <td>{{ result.competition.date.strftime(\"%d.%m.%Y\") }}</td>
+              <td>{{ result.competition.name }}</td>
+              <td>{{ result.place or \"—\" }}</td>
+              <td>{{ result.horse.name }}</td>
+              <td>{{ result.race_time or \"—\" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>Результатов пока нет.</p>
+    {% endif %}
+
+  {% elif current_user.role == 'owner' %}
+    <p>Вы вошли как владелец лошади.</p>
+    <h3>Мои лошади</h3>
+    <p><a href=\"{{ url_for('horse_create') }}\">Добавить лошадь</a></p>
+    {% if horses %}
+      <ul>
+        {% for horse in horses %}
+          <li>{{ horse.name }} ({{ horse.age or \"возраст не указан\" }} лет, {{ horse.sex or \"пол не указан\" }})</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>У вас пока нет зарегистрированных лошадей.</p>
+    {% endif %}
+
+    <h3>Результаты моих лошадей</h3>
+    {% if results %}
+      <table>
+        <thead>
+          <tr>
+            <th>Дата</th>
+            <th>Состязание</th>
+            <th>Место</th>
+            <th>Лошадь</th>
+            <th>Жокей</th>
+            <th>Показанное время</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for result in results %}
+            <tr>
+              <td>{{ result.competition.date.strftime(\"%d.%m.%Y\") }}</td>
+              <td>{{ result.competition.name }}</td>
+              <td>{{ result.place or \"—\" }}</td>
+              <td>{{ result.horse.name }}</td>
+              <td>{{ result.jockey.full_name }}</td>
+              <td>{{ result.race_time or \"—\" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>Результатов пока нет.</p>
+    {% endif %}
+  {% endif %}
+{% endblock %}

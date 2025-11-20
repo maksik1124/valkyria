@@ -1,0 +1,43 @@
+{% extends \"base.html\" %}
+{% block content %}
+  <h2>{% if result %}Редактирование результата{% else %}Новый результат{% endif %}</h2>
+  <form method=\"post\">
+    <label>Состязание:
+      <select name=\"competition_id\" required>
+        <option value=\"\">Выберите состязание</option>
+        {% for competition in competitions %}
+          <option value=\"{{ competition.id }}\" {% if result and result.competition_id == competition.id %}selected{% endif %}>
+            {{ competition.date.strftime(\"%d.%m.%Y\") }} — {{ competition.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Лошадь:
+      <select name=\"horse_id\" required>
+        <option value=\"\">Выберите лошадь</option>
+        {% for horse in horses %}
+          <option value=\"{{ horse.id }}\" {% if result and result.horse_id == horse.id %}selected{% endif %}>
+            {{ horse.name }} ({{ horse.owner.full_name }})
+          </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Жокей:
+      <select name=\"jockey_id\" required>
+        <option value=\"\">Выберите жокея</option>
+        {% for jockey in jockeys %}
+          <option value=\"{{ jockey.id }}\" {% if result and result.jockey_id == jockey.id %}selected{% endif %}>
+            {{ jockey.full_name }}
+          </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Занятое место:
+      <input type=\"number\" name=\"place\" min=\"1\" value=\"{{ result.place if result and result.place is not none else '' }}\">
+    </label>
+    <label>Показанное время (мин:сек.мс):
+      <input type=\"text\" name=\"race_time\" value=\"{{ result.race_time if result else '' }}\">
+    </label>
+    <button type=\"submit\">Сохранить</button>
+  </form>
+{% endblock %}
