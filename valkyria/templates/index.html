@@ -1,4 +1,4 @@
-{% extends \"base.html\" %}
+{% extends "base.html" %}
 {% block content %}
   <h2>Состязания</h2>
   <p>Общая информация о прошедших и предстоящих состязаниях клуба.</p>
@@ -15,8 +15,8 @@
     <tbody>
       {% for competition in competitions %}
         <tr>
-          <td>{{ competition.date.strftime(\"%d.%m.%Y\") }}</td>
-          <td>{% if competition.time %}{{ competition.time.strftime(\"%H:%M\") }}{% endif %}</td>
+          <td>{{ competition.date.strftime("%d.%m.%Y") }}</td>
+          <td>{% if competition.time %}{{ competition.time.strftime("%H:%M") }}{% endif %}</td>
           <td>{{ competition.name }}</td>
           <td>{{ competition.place }}</td>
           <td>
@@ -24,10 +24,10 @@
               <ul>
                 {% for result in competition.results|sort(attribute='place') %}
                   <li>
-                    Место {{ result.place or \"—\" }},
+                    Место {{ result.place or "—" }},
                     жокей: {{ result.jockey.full_name }},
                     лошадь: {{ result.horse.name }},
-                    время: {{ result.race_time or \"—\" }}
+                    время: {{ result.race_time or "—" }}
                   </li>
                 {% endfor %}
               </ul>
@@ -37,7 +37,7 @@
           </td>
         </tr>
       {% else %}
-        <tr><td colspan=\"5\">Состязаний пока нет.</td></tr>
+        <tr><td colspan="5">Состязаний пока нет.</td></tr>
       {% endfor %}
     </tbody>
   </table>

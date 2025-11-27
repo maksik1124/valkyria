@@ -1,8 +1,8 @@
-{% extends \"base.html\" %}
+{% extends "base.html" %}
 {% block content %}
   <h2>Состязания</h2>
   {% if current_user.is_authenticated and current_user.role == 'admin' %}
-    <p><a href=\"{{ url_for('competition_create') }}\">Добавить состязание</a></p>
+    <p><a href="{{ url_for('competition_create') }}">Добавить состязание</a></p>
   {% endif %}
   <table>
     <thead>
@@ -19,21 +19,21 @@
     <tbody>
       {% for competition in competitions %}
         <tr>
-          <td>{{ competition.date.strftime(\"%d.%m.%Y\") }}</td>
-          <td>{% if competition.time %}{{ competition.time.strftime(\"%H:%M\") }}{% endif %}</td>
+          <td>{{ competition.date.strftime("%d.%m.%Y") }}</td>
+          <td>{% if competition.time %}{{ competition.time.strftime("%H:%M") }}{% endif %}</td>
           <td>{{ competition.name }}</td>
           <td>{{ competition.place }}</td>
           {% if current_user.is_authenticated and current_user.role == 'admin' %}
             <td>
-              <a href=\"{{ url_for('competition_edit', competition_id=competition.id) }}\">Редактировать</a>
-              <form method=\"post\" action=\"{{ url_for('competition_delete', competition_id=competition.id) }}\" style=\"display:inline\" onsubmit=\"return confirm('Удалить состязание?');\">
-                <button type=\"submit\">Удалить</button>
+              <a href="{{ url_for('competition_edit', competition_id=competition.id) }}">Редактировать</a>
+              <form method="post" action="{{ url_for('competition_delete', competition_id=competition.id) }}" style="display:inline" onsubmit="return confirm('Удалить состязание?');">
+                <button type="submit">Удалить</button>
               </form>
             </td>
           {% endif %}
         </tr>
       {% else %}
-        <tr><td colspan=\"5\">Состязаний пока нет.</td></tr>
+        <tr><td colspan="5">Состязаний пока нет.</td></tr>
       {% endfor %}
     </tbody>
   </table>
