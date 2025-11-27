@@ -611,38 +611,6 @@ def result_delete(result_id):
     return redirect(url_for("results_list"))
 
 
-@app.route("/profile", methods=["GET", "POST"])
-@login_required
-def profile():
-    user = current_user
-
-    if request.method == "POST":
-        user.full_name = request.form.get("full_name", user.full_name)
-        age_raw = request.form.get("age")
-        user.address = request.form.get("address")
-        user.contact_info = request.form.get("contact_info")
-
-        if age_raw:
-            try:
-                user.age = int(age_raw)
-            except ValueError:
-                flash("Возраст должен быть числом.", "danger")
-
-        if user.role == ROLE_JOCKEY:
-            rating_raw = request.form.get("rating")
-            if rating_raw:
-                try:
-                    user.rating = float(rating_raw)
-                except ValueError:
-                    flash("Рейтинг должен быть числом.", "danger")
-
-        db.session.commit()
-        flash("Профиль обновлён.", "success")
-        return redirect(url_for("profile"))
-
-    return render_template("profile.html", user=user)
-
-
 @app.cli.command("init-db")
 def init_db():
     """Создание таблиц в базе данных."""
