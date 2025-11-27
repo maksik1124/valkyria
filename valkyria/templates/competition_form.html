@@ -1,19 +1,19 @@
-{% extends \"base.html\" %}
+{% extends "base.html" %}
 {% block content %}
   <h2>{% if competition %}Редактирование состязания{% else %}Новое состязание{% endif %}</h2>
-  <form method=\"post\">
+  <form method="post">
     <label>Название:
-      <input type=\"text\" name=\"name\" required value=\"{{ competition.name if competition else '' }}\">
+      <input type="text" name="name" required value="{{ competition.name if competition else '' }}">
     </label>
     <label>Дата:
-      <input type=\"date\" name=\"date\" required value=\"{% if competition %}{{ competition.date.strftime('%Y-%m-%d') }}{% endif %}\">
+      <input type="date" name="date" required value="{% if competition %}{{ competition.date.strftime('%Y-%m-%d') }}{% endif %}">
     </label>
     <label>Время:
-      <input type=\"time\" name=\"time\" value=\"{% if competition and competition.time %}{{ competition.time.strftime('%H:%M') }}{% endif %}\">
+      <input type="time" name="time" value="{% if competition and competition.time %}{{ competition.time.strftime('%H:%M') }}{% endif %}">
     </label>
     <label>Место проведения:
-      <input type=\"text\" name=\"place\" value=\"{{ competition.place if competition else '' }}\">
+      <input type="text" name="place" value="{{ competition.place if competition else '' }}">
     </label>
-    <button type=\"submit\">Сохранить</button>
+    <button type="submit">Сохранить</button>
   </form>
 {% endblock %}

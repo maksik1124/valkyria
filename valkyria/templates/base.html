@@ -1,36 +1,36 @@
 <!doctype html>
-<html lang=\"ru\">
+<html lang="ru">
   <head>
-    <meta charset=\"utf-8\">
-    <title>{{ title or \"Валькирия\" }}</title>
-    <link rel=\"stylesheet\" href=\"{{ url_for('static', filename='styles.css') }}\">
+    <meta charset="utf-8">
+    <title>{{ title or "Валькирия" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   </head>
   <body>
     <header>
       <h1>Веб-приложение «Валькирия»</h1>
       <nav>
-        <a href=\"{{ url_for('index') }}\">Состязания</a>
-        <a href=\"{{ url_for('results_list') }}\">Результаты</a>
+        <a href="{{ url_for('index') }}">Состязания</a>
+        <a href="{{ url_for('results_list') }}">Результаты</a>
         {% if current_user.is_authenticated %}
-          <a href=\"{{ url_for('dashboard') }}\">Личный кабинет</a>
-          <a href=\"{{ url_for('horses_list') }}\">Мои лошади</a>
-          <a href=\"{{ url_for('profile') }}\">Профиль</a>
+          <a href="{{ url_for('dashboard') }}">Личный кабинет</a>
+          <a href="{{ url_for('horses_list') }}">Мои лошади</a>
+          <a href="{{ url_for('profile') }}">Профиль</a>
           {% if current_user.role == 'admin' %}
-            <a href=\"{{ url_for('competitions_list') }}\">Управление состязаниями</a>
+            <a href="{{ url_for('competitions_list') }}">Управление состязаниями</a>
           {% endif %}
-          <a href=\"{{ url_for('logout') }}\">Выход ({{ current_user.username }})</a>
+          <a href="{{ url_for('logout') }}">Выход ({{ current_user.username }})</a>
         {% else %}
-          <a href=\"{{ url_for('login') }}\">Вход</a>
-          <a href=\"{{ url_for('register') }}\">Регистрация</a>
+          <a href="{{ url_for('login') }}">Вход</a>
+          <a href="{{ url_for('register') }}">Регистрация</a>
         {% endif %}
       </nav>
     </header>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        <ul class=\"flashes\">
+        <ul class="flashes">
           {% for category, message in messages %}
-            <li class=\"{{ category }}\">{{ message }}</li>
+            <li class="{{ category }}">{{ message }}</li>
           {% endfor %}
         </ul>
       {% endif %}
