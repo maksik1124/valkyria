@@ -2,18 +2,27 @@
 {% block content %}
   <h2>Личный кабинет</h2>
 
-  {% if current_user.role == 'admin' %}
-    <p>Вы вошли как администратор клуба.</p>
-    <ul>
-      <li>Количество состязаний: {{ competitions_count }}</li>
-      <li>Количество лошадей: {{ horses_count }}</li>
-      <li>Количество результатов: {{ results_count }}</li>
-    </ul>
-    <p>
-      <a href="{{ url_for('competitions_list') }}">Управление состязаниями</a> |
-      <a href="{{ url_for('horses_list') }}">Управление лошадьми</a> |
-      <a href="{{ url_for('results_list') }}">Управление результатами</a>
-    </p>
+ {% if current_user.role == 'admin' %}
+   <h1>Панель администратора</h1>
+
+   <p>Всего состязаний: {{ competitions_count }}</p>
+   <p>Всего лошадей: {{ horses_count }}</p>
+   <p>Всего результатов: {{ results_count }}</p>
+
+   <h2>Топ-3 жокея по рейтингу</h2>
+
+   {% if top_jockeys %}
+     <ul>
+       {% for jockey in top_jockeys %}
+         <li>
+           {{ jockey.full_name }} —
+           рейтинг: {{ jockey.rating if jockey.rating is not none else 'нет данных' }}
+         </li>
+       {% endfor %}
+     </ul>
+   {% else %}
+     <p>Пока нет жокеев с заданным рейтингом.</p>
+   {% endif %}
 
   {% elif current_user.role == 'jockey' %}
     <p>Вы вошли как жокей.</p>

@@ -39,7 +39,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, nullable=False)
     full_name = db.Column(db.String(128), nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+    password_hash = db.Column(db.String(512), nullable=False)
     role = db.Column(db.String(20), nullable=False)
     age = db.Column(db.Integer)
     address = db.Column(db.String(255))
@@ -221,11 +221,20 @@ def dashboard():
         competitions_count = Competition.query.count()
         horses_count = Horse.query.count()
         results_count = Result.query.count()
+        # Новая фича: топ-3 жокеев по рейтингу
+        top_jockeys = (
+            User.query.filter_by(role=ROLE_JOCKEY)
+            .filter(User.rating.isnot(None))
+            .order_by(User.rating.desc())
+            .limit(3)
+            .all()
+        )
         return render_template(
             "dashboard.html",
             competitions_count=competitions_count,
             horses_count=horses_count,
             results_count=results_count,
+            top_jockeys=top_jockeys,  # <- передаём в шаблон
         )
 
     elif current_user.role == ROLE_JOCKEY:
@@ -609,38 +618,6 @@ def result_delete(result_id):
     db.session.commit()
     flash("Результат удалён.", "success")
     return redirect(url_for("results_list"))
-
-
-@app.route("/profile", methods=["GET", "POST"])
-@login_required
-def profile():
-    user = current_user
-
-    if request.method == "POST":
-        user.full_name = request.form.get("full_name", user.full_name)
-        age_raw = request.form.get("age")
-        user.address = request.form.get("address")
-        user.contact_info = request.form.get("contact_info")
-
-        if age_raw:
-            try:
-                user.age = int(age_raw)
-            except ValueError:
-                flash("Возраст должен быть числом.", "danger")
-
-        if user.role == ROLE_JOCKEY:
-            rating_raw = request.form.get("rating")
-            if rating_raw:
-                try:
-                    user.rating = float(rating_raw)
-                except ValueError:
-                    flash("Рейтинг должен быть числом.", "danger")
-
-        db.session.commit()
-        flash("Профиль обновлён.", "success")
-        return redirect(url_for("profile"))
-
-    return render_template("profile.html", user=user)
 
 
 @app.cli.command("init-db")
