@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16
+    container_name: valkyria-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: valkyria_db
+      POSTGRES_USER: valkyria_user
+      POSTGRES_PASSWORD: valkyria_password
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  web:
+    build: .
+    container_name: valkyria-web
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      SECRET_KEY: "_pPOjzEjQRU}&h#/Nlbz/w5VqLi5y]"
+      DATABASE_URL: "postgresql+psycopg2://valkyria_user:valkyria_password@db/valkyria_db"
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+      - ./logs:/var/log/valkyria
