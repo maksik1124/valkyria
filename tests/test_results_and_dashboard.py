@@ -1,6 +1,14 @@
 from datetime import date
 from app import Competition, Horse, Result, db, ROLE_ADMIN, ROLE_JOCKEY, User
-from .test_competitions_and_horses import login_as
+
+def login_as(client, username, password):
+    return client.post(
+        "/login",
+        data={"username": username, "password": password},
+        follow_redirects=True,
+    )
+
+
 def test_admin_can_create_result(client, admin_user, app_ctx, jockey_user, owner_user):
     """
     Интеграционный тест: /results/create.
