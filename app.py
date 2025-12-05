@@ -212,7 +212,6 @@ def logout():
     flash("Вы вышли из системы.", "success")
     return redirect(url_for("index"))
 
-
 @app.route("/dashboard")
 @login_required
 def dashboard():
@@ -221,11 +220,22 @@ def dashboard():
         competitions_count = Competition.query.count()
         horses_count = Horse.query.count()
         results_count = Result.query.count()
+
+        # Топ-3 жокея по рейтингу
+        top_jockeys = (
+            User.query.filter_by(role=ROLE_JOCKEY)
+            .filter(User.rating.isnot(None))
+            .order_by(User.rating.desc())
+            .limit(3)
+            .all()
+        )
+
         return render_template(
             "dashboard.html",
             competitions_count=competitions_count,
             horses_count=horses_count,
             results_count=results_count,
+            top_jockeys=top_jockeys,
         )
 
     elif current_user.role == ROLE_JOCKEY:
@@ -251,6 +261,7 @@ def dashboard():
     else:
         flash("Неизвестная роль пользователя.", "danger")
         return redirect(url_for("index"))
+
 
 
 @app.route("/profile", methods=["GET", "POST"])
