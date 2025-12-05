@@ -29,7 +29,8 @@ def test_login_success_redirects_to_dashboard(client, app_ctx):
     )
 
     assert resp.status_code == 200
-    assert b"Успешный вход в систему" in resp.data
+    text = resp.get_data(as_text=True)
+    assert "Успешный вход в систему" in text
 
 
 def test_login_wrong_password_shows_error(client, app_ctx):
@@ -52,7 +53,8 @@ def test_login_wrong_password_shows_error(client, app_ctx):
     )
 
     assert resp.status_code == 200
-    assert b"Неверный логин или пароль" in resp.data
+    text = resp.get_data(as_text=True)
+    assert "Неверный логин или пароль" in text
 
 def test_profile_update_changes_age_and_contact(client, owner_user, app_ctx):
     """
@@ -85,7 +87,8 @@ def test_profile_update_changes_age_and_contact(client, owner_user, app_ctx):
         follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert b"Профиль обновлён" in resp.data
+    text = resp.get_data(as_text=True)
+    assert "Профиль обновлён" in text
 
     from app import db
 

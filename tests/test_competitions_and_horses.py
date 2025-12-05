@@ -35,7 +35,8 @@ def test_admin_can_create_competition(client, admin_user, app_ctx):
         follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert b"Состязание добавлено" in resp.data
+    text = resp.get_data(as_text=True)
+    assert "Состязание добавлено" in text
 
     comp = Competition.query.filter_by(name="Test Competition").first()
     assert comp is not None
@@ -57,7 +58,8 @@ def test_non_admin_cannot_access_competition_create(client, jockey_user, app_ctx
 
     resp = client.get("/competitions/create", follow_redirects=True)
     assert resp.status_code == 200
-    assert b"Требуются права администратора" in resp.data
+    text = resp.get_data(as_text=True)
+    assert "Требуются права администратора" in text
 
 
 from app import User, ROLE_OWNER

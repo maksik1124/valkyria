@@ -30,7 +30,8 @@ def test_admin_can_create_result(client, admin_user, app_ctx, jockey_user, owner
         follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert b"Результат добавлен" in resp.data
+    text = resp.get_data(as_text=True)
+    assert "Результат добавлен" in text
 
     result = Result.query.filter_by(competition_id=comp.id).first()
     assert result is not None
