@@ -1,6 +1,14 @@
 import os
+import sys
+from pathlib import Path
+
 import pytest
 
+# Путь к корню проекта = родительская папка относительно tests/
+ROOT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT_DIR))
+
+# Для тестов используем SQLite в памяти, а не реальную PostgreSQL
 os.environ["DATABASE_URL"] = "sqlite:///:memory:"
 
 from app import app, db, User, ROLE_ADMIN, ROLE_JOCKEY, ROLE_OWNER  # noqa: E402
@@ -32,7 +40,6 @@ def client(app_ctx):
 
 @pytest.fixture()
 def admin_user(app_ctx):
-    """Администратор в тестовой базе."""
     admin = User(
         username="admin",
         full_name="Администратор",
@@ -70,3 +77,4 @@ def owner_user(app_ctx):
     db.session.add(owner)
     db.session.commit()
     return owner
+
