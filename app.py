@@ -178,7 +178,7 @@ def register():
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
-        flash("Регистрация meow  успешно. Теперь войдите в систему.", "success")
+        flash("Регистрация прошла успешно. Теперь войдите в систему.", "success")
         return redirect(url_for("login"))
 
     return render_template("register.html")
