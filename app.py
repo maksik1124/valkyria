@@ -264,6 +264,10 @@ def dashboard():
         return redirect(url_for("index"))
 
 
+@app.route("/new_feature")
+def feature():
+    return "Hello, World!"
+
 
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
