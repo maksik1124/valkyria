@@ -45,6 +45,7 @@ class User(UserMixin, db.Model):
     address = db.Column(db.String(255))
     rating = db.Column(db.Float)  # рейтинг жокея
     contact_info = db.Column(db.String(255))  # контакты владельца
+    email = db.Column(db.String(120), unique=True, nullable=True)
 
     horses = db.relationship("Horse", backref="owner", lazy=True)
     jockey_results = db.relationship(

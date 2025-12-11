@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict A8god27mJrAddlSr1mPyc5ZcE7W1gqZeJD6yN0t7DEKmKPt7MlXqLwwk9Iunj9s
+\restrict Q77FFTCysdYgQGzV1kBF8RswNIS4K85I9iTwyfWphHW7XWrZjBMBSUUk7LgmSgh
 
 -- Dumped from database version 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1)
@@ -156,7 +156,8 @@ CREATE TABLE public.users (
     age integer,
     address character varying(255),
     rating double precision,
-    contact_info character varying(255)
+    contact_info character varying(255),
+    email character varying(120)
 );
 
 
@@ -237,6 +238,14 @@ ALTER TABLE ONLY public.results
 
 
 --
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: valkyria_user
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: valkyria_user
 --
 
@@ -288,5 +297,5 @@ ALTER TABLE ONLY public.results
 -- PostgreSQL database dump complete
 --
 
-\unrestrict A8god27mJrAddlSr1mPyc5ZcE7W1gqZeJD6yN0t7DEKmKPt7MlXqLwwk9Iunj9s
+\unrestrict Q77FFTCysdYgQGzV1kBF8RswNIS4K85I9iTwyfWphHW7XWrZjBMBSUUk7LgmSgh
 
