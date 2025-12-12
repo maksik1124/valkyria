@@ -46,7 +46,7 @@ class User(UserMixin, db.Model):
     rating = db.Column(db.Float)  # рейтинг жокея
     contact_info = db.Column(db.String(255))  # контакты владельца
     email = db.Column(db.String(120), unique=True, nullable=True)
-
+    phone = db.Column(db.String(32), nullable=True)
     horses = db.relationship("Horse", backref="owner", lazy=True)
     jockey_results = db.relationship(
         "Result",
@@ -82,6 +82,7 @@ class Competition(db.Model):
     date = db.Column(db.Date, nullable=False)
     time = db.Column(db.Time, nullable=True)
     place = db.Column(db.String(128))
+
 
     results = db.relationship("Result", backref="competition", lazy=True)
 
